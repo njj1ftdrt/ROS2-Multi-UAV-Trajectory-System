@@ -22,7 +22,7 @@ ros2 launch px4_swarm_controller launch_simulation.py
 python3 swarm_commander.py
 ## ✨ 核心工程特性 (Core Features)
   * **🚀 原生 DDS 架构与命名空间隔离**
-      * 彻底移除 MavROS 依赖，通过 Micro XRCE-DDS 实现低延迟底层穿透。完美解决多机协同（Swarm）场景下的 ROS2 节点命名空间冲突与 Topic 串扰问题。
+      * 移除 MavROS 依赖，通过 Micro XRCE-DDS 实现低延迟底层穿透。完美解决多机协同（Swarm）场景下的 ROS2 节点命名空间冲突与 Topic 串扰问题。
   * **🧠 软硬解耦的云边协同架构**
       * **高层算法（Python）**：专注高频生成动态 3D 目标坐标（支持后续接入神经网络预测模型）。
       * **底层执行（C++）**：黑盒化处理 Offboard 模式心跳、解锁、起飞及状态机管理，保障飞行器绝对安全。
@@ -32,7 +32,7 @@ python3 swarm_commander.py
   * **📊 全链路数据闭环与高保真重建**
       * 利用 `rosbag2` 实时捕获飞控底层真实里程计（`vehicle_odometry`）数据，脱离物理引擎限制，通过离线 Python 脚本完成 3D 轨迹的高保真渲染与时空误差量化。
 ## 📈 性能量化与瓶颈分析 (Performance & Evaluation)
-本系统完成了严苛的动态追踪测试（2m/s 绕圆机动），并通过提取黑匣子数据生成了如下的 3D 轨迹追踪对比图：
+本系统完成动态追踪测试（2m/s 绕圆机动），并通过提取黑匣子数据生成了如下的 3D 轨迹追踪对比图：
 *(注：青色虚线为 Python 端生成的理论 AI 轨迹，粉色实线为 C++ 端驱动飞控执行的真实物理轨迹)*
 **量化指标 (Metrics)：**
   * **最大瞬态误差 (Max Error):** `3.461 m` (主要发生于初始变阵与起飞爬升阶段)
