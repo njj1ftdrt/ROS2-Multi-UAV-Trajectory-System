@@ -32,6 +32,7 @@ python3 swarm_commander.py
   * **📊 全链路数据闭环与高保真重建**
       * 利用 `rosbag2` 实时捕获飞控底层真实里程计（`vehicle_odometry`）数据，脱离物理引擎限制，通过离线 Python 脚本完成 3D 轨迹的高保真渲染与时空误差量化。
 ## 📈 性能量化与瓶颈分析 (Performance & Evaluation)
+![UAV 3D Trajectory Tracking](Figure_1.png)
 本系统完成动态追踪测试（2m/s 绕圆机动），并通过提取黑匣子数据生成了如下的 3D 轨迹追踪对比图：
 *(注：青色虚线为 Python 端生成的理论 AI 轨迹，粉色实线为 C++ 端驱动飞控执行的真实物理轨迹)*
 **量化指标 (Metrics)：**
