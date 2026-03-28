@@ -1,6 +1,25 @@
 # 🛸 ROS2 Multi-UAV Trajectory Execution & Analysis System
 ### 基于 ROS2 与 DDS 架构的多无人机轨迹控制与数据闭环验证系统
-本系统是一个基于 **Ubuntu 24.04 + ROS2 Jazzy + PX4 SITL** 的高保真多无人机协同测试床。项目摒弃了传统的 MavROS 架构，采用原生 **Micro XRCE-DDS** 桥接底层飞控，实现了高层 AI 轨迹生成（Python）与底层高鲁棒性执行控制（C++）的软硬解耦。系统内置完整的“仿真-采集-渲染-量化”数据闭环，为深度学习轨迹预测与多机协同规划算法提供可靠的 Baseline（基线）验证环境。
+本系统是一个基于 **Ubuntu 24.04 + ROS2 Jazzy + PX4 SITL** 的高保真多无人机协同测试床。项目摒弃了传统的 MavROS 架构，采用原生 **Micro XRCE-DDS** 桥接底层飞控，实现了高层 AI 轨迹生成（Python）与底层高鲁棒性执行控制（C++）的软硬解耦。系统内置完整的“仿真-采集-渲染-量化”数据闭环，为深度学习轨迹预测与多机协同规划算法提供可靠的 Baseline验证环境。
+## ⚙️ 环境依赖
+### 1. 系统与依赖
+* 操作系统: `Ubuntu 24.04`
+* 核心中间件: `ROS2 Jazzy` + `Micro XRCE-DDS Agent`
+* 仿真环境: `PX4 Autopilot` (SITL + Gazebo)
+* Python 依赖: `pandas`, `matplotlib`, `numpy`
+### 2. 编译与运行逻辑
+本项目为多节点分布式系统，需依次拉起仿真世界与控制大脑：
+```bash
+# 1. 编译自定义控制节点
+cd ~/ros2_ws
+colcon build --packages-select px4_swarm_controller
+source install/local_setup.bash
+# 2. 启动底层通信桥梁与 PX4 物理仿真
+MicroXRCEAgent udp4 -p 8888
+cd ~/PX4-Autopilot && ./start_swarm.sh
+# 3. 启动 C++ 执行器与 Python 算法中枢
+ros2 launch px4_swarm_controller launch_simulation.py
+python3 swarm_commander.py
 ## ✨ 核心工程特性 (Core Features)
   * **🚀 原生 DDS 架构与命名空间隔离**
       * 彻底移除 MavROS 依赖，通过 Micro XRCE-DDS 实现低延迟底层穿透。完美解决多机协同（Swarm）场景下的 ROS2 节点命名空间冲突与 Topic 串扰问题。
