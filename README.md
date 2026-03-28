@@ -57,6 +57,8 @@ cd ~/PX4-Autopilot && ./start_swarm.sh
 ros2 launch px4_swarm_controller launch_simulation.py
 python3 swarm_commander.py
 ## ✨ 核心工程特性 (Core Features)
+      🛸 5 机集群分布式协同与动态变阵 (Swarm Formation Control)
+      * 在单机高精度追踪的基础上，系统成功扩展至 5 机分布式控制。利用 ROS2 订阅发布机制与空间相位差计算，实现了集群从地面起飞、空中悬停到 V字形 与 环形 阵型的无碰撞动态切换，验证了系统在多并发节点下的算力调度与通信稳定性。
   * **🚀 原生 DDS 架构与命名空间隔离**
       * 移除 MavROS 依赖，通过 Micro XRCE-DDS 实现低延迟底层穿透。完美解决多机协同（Swarm）场景下的 ROS2 节点命名空间冲突与 Topic 串扰问题。
   * **🧠 软硬解耦的云边协同架构**
